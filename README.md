@@ -38,7 +38,7 @@ https://twitter.com/devemin/status/1234733593882005504
 
 # 参考にしたURL。
 
-ありがとうございます。
+ほぼこちらのqiita のコードを参考にさせてもらいました。　ありがとうございます。
 
 参考１   Qiita UnityでUDPを受信してみる
 
