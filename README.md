@@ -14,6 +14,11 @@ ESP32(送信) と PC側(受信)にて行います。
 https://twitter.com/devemin/status/1234733593882005504
 
 
+#コード
+
+Arduino: udptest.ino
+
+Unity: udptest.cs
 
 # 使い方
 
@@ -27,7 +32,7 @@ https://twitter.com/devemin/status/1234733593882005504
 
 3. Unity でこのリポジトリをダウンロードし開きます。Scenes/SampleScene シーンを開きます。
 
-　（UDPcontrolオブジェクトに、udptest.cs スクリプトをアタッチしております。）
+　（UDPcontrolオブジェクトに、Assets/udptest.cs スクリプトをアタッチしております。）
 
 4. 再生ボタンを押すと、画面に変化はありませんが、待ち受け状態になります。データ受信するとDebugコンソールに受信したバイトの数字が表示されます。
 
