@@ -5,14 +5,13 @@ UDP test, ESP32 x Unity
 
 こんにちは。このリポジトリでは、簡単に UDP通信のテストを行います。
 
-ESP32(送信) と PC側(受信)にて行います。
-
-買ってきて30分で出来て感動しました・・・！ ESP32 便利すぎ？
+ESP32 と PCにて、それぞれ送受信を行います。　ESP32 便利すぎ？
 
 # 動作
 
 https://twitter.com/devemin/status/1234733593882005504
 
+（最初の１方向通信の動作、今は送受信に更新しました）
 
 # コード
 
@@ -22,7 +21,7 @@ Unity: udptest.cs
 
 # 使い方
 
-1. Arduinoで、udptest.ino を開きます。（Arduino IDE環境構築は下記URL参照）
+1. Arduino IDEで、udptest.ino を開きます。（Arduino IDE環境構築は下記URL参照）
 
 　（私は秋月WROOM32D開発キット win10 で、シリアルのドライバインストールが必要でした。）
 
@@ -30,13 +29,15 @@ Unity: udptest.cs
 
 　（SSID はアクセスポイントの名前、送り先IPアドレスは、win 10 ならスタート→ 入力「cmd」 → 「Enter」 → 入力「ipconfig /all」 → 使ってるネットワークのアドレスを調べる（イーサネットやワイヤレスネットワークの IP v4 アドレス。192.168.0.10 等）　virtualネットワーク等色々ありますので間違えないよう）　）
 
-3. Unity でこのリポジトリをダウンロードし開きます。Scenes/SampleScene シーンを開きます。
+3. Unity でこのリポジトリをダウンロードし開きます。SampleScene シーンを開きます。
 
-　（UDPcontrolオブジェクトに、Assets/udptest.cs スクリプトをアタッチしております。）
+　（UDPcontrolオブジェクトに、udptest.cs スクリプトをアタッチしております。）
 
-4. 再生ボタンを押すと、画面に変化はありませんが、待ち受け状態になります。データ受信するとDebugコンソールに受信したバイトの数字が表示されます。
+4. 再生ボタンを押すと、画面に変化はありませんが、待ち受け状態になります。Debugコンソールに受信したバイトの数字が表示されます。
 
-5. 接続されました！　適宜その送受信のコードをご変更ください。
+5. 画面内の「send UDP」ボタンを押すと、ESP32 へデータを送信します。
+
+6. これで送受信できました！　適宜コードをご変更ください。
 
 　(つながらない場合は、Arduino, Unity が同じwifi ネットワークにあること、ポートを揃えてるかどうか等、ご確認下さいね☆　)
 
@@ -53,6 +54,9 @@ https://qiita.com/Tsukkey/items/247285c703fbbc6c6cd2
 
 https://qiita.com/nenjiru/items/8fa8dfb27f55c0205651
 
+参考３　 M5Stack同士でWiFi, UDPによる双方向リアルタイム同時通信する実験
+
+https://www.mgo-tec.com/blog-entry-udp-wifi-m5stack.html/3#title09
 
 # その他
 
