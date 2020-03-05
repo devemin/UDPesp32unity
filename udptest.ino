@@ -1,62 +1,95 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-
-//UDP通信について
-//https://qiita.com/Tsukkey/items/247285c703fbbc6c6cd2
-
-
-const char* ssid = "apssid";
+const char* ssid = "SSID";
 const char* password = "passpass";
 
-static WiFiUDP wifiUdp; 
-static const char *kRemoteIpadr = "192.168.x.x";
-static const int kRmoteUdpPort = 22222; //送信先のポート
-static const int kLocalPort = 7000;  //自身のポート
+const char* client_address = "192.168.0.13";  //送り先
+const int client_port = 22222;  //送り先
+const int server_port = 22224;  //このESP32 のポート番号
 
 
-byte x = 0;
+//ESP32 x Unity x UDP
+//3byte UDPにて送受信するサンプルです。
 
+//参考：
+//ESP32でUDP通信やってみた（ESP32インストール手順解説あり）
+//https://qiita.com/Tsukkey/items/247285c703fbbc6c6cd2
+
+//M5Stack同士でWiFi, UDPによる双方向リアルタイム同時通信する実験
+//https://www.mgo-tec.com/blog-entry-udp-wifi-m5stack.html/3#title09
+
+
+WiFiUDP udp;
+boolean sendflag = false;
+
+byte recvbuf[1024];
+byte sendbuf[1024];
+int recvbuf_size = 3;
+int sendbuf_size = 3;
+
+int c=0;
+
+
+void connectToWiFi(){
+}
 
 void setup() {
-  
   Serial.begin(115200);
-  Serial.println("Booting");
-  WiFi.mode(WIFI_STA);
+
+  Serial.println("[ESP32] Connecting to WiFi network: " + String(ssid));
+  WiFi.disconnect(true, true);
+  delay(500);
+  
   WiFi.begin(ssid, password);
-  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-    Serial.println("Connection Failed! Rebooting...");
-    delay(5000);
-    ESP.restart();
-  }
-
-
   while( WiFi.status() != WL_CONNECTED) {
     delay(500);  
   }  
-  wifiUdp.begin(kLocalPort);
-  
+  udp.begin(server_port);
+  delay(500);  
 
-  Serial.println("Ready");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-
-  
+  randomSeed(1);
 }
 
-void loop() {
 
-  wifiUdp.beginPacket(kRemoteIpadr, kRmoteUdpPort);
-  wifiUdp.write(x);
-  wifiUdp.endPacket();  
+void receiveUDP(){
+    int packetSize = udp.parsePacket();
+    
+    if(packetSize > 0){
+      //Serial.println("recv");
+      int getsize = udp.read(recvbuf, recvbuf_size);
+      Serial.print(recvbuf[0], HEX);
+      Serial.print(recvbuf[1], HEX);
+      Serial.print(recvbuf[2], HEX);
+      Serial.print("\n");
+    }
+}
 
-  //float 等送る時は共用体を利用するとのこと
-  //https://hawksnowlog.blogspot.com/2016/11/sending-multibytes-with-serialwrite.html#float-4byte-%E3%81%AE%E6%83%85%E5%A0%B1%E3%82%92%E9%80%81%E4%BF%A1%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95
-
-  delay(300);
-
-  x++;
-  if (x >= 255) {
-    x = 0;
+void sendUDP(){
+  if(sendflag){
+    //Serial.println("send");    
+    udp.beginPacket(client_address, client_port);
+    udp.write(sendbuf, sendbuf_size);
+    udp.endPacket();
+    sendflag = false;
   }
+}
+
+ 
+void loop() {
+  receiveUDP();
+
+
+  if (c>= 10) {
+    sendflag = true;
+    sendbuf[0] = random(0,255);
+    sendbuf[1] = random(0,255);
+    sendbuf[2] = random(0,255);
+
+    sendUDP();
+    c = 0;
+  }
+  delay(100);
+  c++;
+  
 }

@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using UnityEngine.UI;
 
 //Unity でUDP通信受信
 //https://qiita.com/nenjiru/items/8fa8dfb27f55c0205651
@@ -18,28 +17,35 @@ using UnityEngine.UI;
 
 public class udptest : MonoBehaviour
 {
-    int LOCA_LPORT = 22222;
+    int LOCAL_PORT = 22222;
     static UdpClient udp;
+    static UdpClient udp_send;
+
     Thread thread;
 
 
+    string host = "192.168.0.33";
+    int port = 22224;
+
+    // Start is called before the first frame update
     void Start()
     {
-        udp = new UdpClient(LOCA_LPORT);
-        udp.Client.ReceiveTimeout = 0;
+        udp = new UdpClient(LOCAL_PORT);
+        udp_send = new UdpClient();
+        udp.Client.ReceiveTimeout = 0;          //0にしてみたら通信できたけど、タイムアウト０＝
+        udp_send.Connect(host, port);
         thread = new Thread(new ThreadStart(ThreadMethod));
         thread.Start();
-
-
-
     }
 
+    // Update is called once per frame
     void Update()
     {
 
     }
     void OnApplicationQuit()
     {
+        udp_send.Close();
         thread.Abort();
     }
 
@@ -49,12 +55,27 @@ public class udptest : MonoBehaviour
         {
             IPEndPoint remoteEP = null;
             byte[] data = udp.Receive(ref remoteEP);
-            Debug.Log(data[0].ToString());
+            string test = "";
+            test = "0x";
+
+            for (int a = data.Length - 1; a >= 0; a--)
+            {
+                test += data[a].ToString("x2");
+            }
+            Debug.Log(test);
 
             //連続したバイトを2byte や4byte のデータタイプ(int や float など)に変換するときは、ビットシフトなど利用
-            //送られてくるバイトをシフトしてAND演算など
             // float newdata = (data[0] << 8) & (data[1]);
 
         }
     }
+
+
+    public void senddataUDP()
+    {
+
+        byte[] data = { 0x33, 0x34, 0x35, };
+        udp_send.Send(data, 3);
+    }
+
 }
