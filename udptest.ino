@@ -31,9 +31,6 @@ int sendbuf_size = 3;
 int c=0;
 
 
-void connectToWiFi(){
-}
-
 void setup() {
   Serial.begin(115200);
 
@@ -73,6 +70,10 @@ void sendUDP(){
     udp.endPacket();
     sendflag = false;
   }
+  
+  //２バイト以上のデータタイプはビットシフトしてバイト分割して送る
+  //float は共用体を利用して送る
+  //https://hawksnowlog.blogspot.com/2016/11/sending-multibytes-with-serialwrite.html#float-4byte-%E3%81%AE%E6%83%85%E5%A0%B1%E3%82%92%E9%80%81%E4%BF%A1%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95
 }
 
  
