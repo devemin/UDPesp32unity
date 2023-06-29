@@ -72,7 +72,7 @@ https://www.mgo-tec.com/blog-entry-udp-wifi-m5stack.html/3#title09
 
 当環境　Unity 2019.1.10f1　　　Arduino IDE 1.8.9
 
-MIT Liscence
+MIT Licence
 
 @devemin   https://twitter.com/devemin
 
